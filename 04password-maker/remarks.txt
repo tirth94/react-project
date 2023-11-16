@@ -1,1 +1,3 @@
 made mistake in line number 18, 19, 21 {missing pass some values and write wrong spaling. west my some minits to find out this}
+
+pass += str.charAt(char) :- aa line ma + add karta bhuli gayo hato tethi loopma ek j akshar aavto hato mtlb ke ek value e bija value ne overright karti hati..

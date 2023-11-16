@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import './App.css'
 
 function App() {
@@ -6,6 +6,10 @@ function App() {
   const [numAllowed, setNumAllowed] = useState(false)
   const [charAllowed, setCharAllowed] = useState(false)
   const [password, setPassword] = useState("")
+
+
+  // useRef hook
+  const passwordRef = useRef(null)
 
   const passwordGenerator = useCallback(() => {
     let pass = ''
@@ -16,10 +20,18 @@ function App() {
 
     for (let i = 1; i <= length; i++) {
       let char = Math.floor(Math.random() * str.length + 1)
-      pass = str.charAt(char)
+      pass += str.charAt(char)
     }
       setPassword(pass)
   }, [length, numAllowed, charAllowed, setPassword])
+
+  const copyPasswordToClipboard = useCallback(() => {
+passwordRef.current?.select();
+passwordRef.current?.setSelectionRange(0, 10);
+
+
+    window.navigator.clipboard.writeText(password)
+  }, [password])
 
   useEffect(() => {
     passwordGenerator()
@@ -35,8 +47,11 @@ function App() {
            value={password}
            className='outline-none w-full py-1 px-3'
            placeholder='Password'
-           readOnly />
-           <button className='bg-blue-600 px-2 font-bold'>copy</button>
+           readOnly
+           ref={passwordRef} />
+           <button 
+           onClick={copyPasswordToClipboard}
+           className='bg-blue-600 px-2 font-bold'>copy</button>
         </div>
 
         <div className='flex text-sm gap-x-2'>
@@ -50,6 +65,7 @@ function App() {
             onChange={(e) => {setLength(e.target.value)}}/>
             <label>length: {length}</label>
           </div>
+
           <div className='flex items-center gap-x-1'>
             <input 
             type="checkbox"
@@ -58,6 +74,7 @@ function App() {
             onChange={() => {setNumAllowed ((prev) => !prev)}}/>
             <label htmlFor="numberInput">Number</label>
           </div>
+
           <div className='flex items-center gap-x-1'>
             <input 
             type="checkbox"
@@ -66,6 +83,7 @@ function App() {
             onChange={() => {setCharAllowed ((prev) => !prev)}}/>
             <label htmlFor="characterInput">Character</label>
           </div>
+
         </div>
       </div>
     </>
